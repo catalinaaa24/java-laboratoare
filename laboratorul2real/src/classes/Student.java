@@ -1,10 +1,14 @@
 package classes;
 
-public class Student {
-    String firstName;
-    String lastName;
+public class Student extends Person{
     int groupNumber;
     int grade;
+
+    public Student() {
+        this.firstName = "";
+        this.lastName = "";
+    }
+
     public Student(String firstName, String lastName, int groupNumber, int grade) {
         this.firstName = firstName;
         this.lastName = lastName;

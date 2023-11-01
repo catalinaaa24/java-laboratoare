@@ -5,14 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-public class CourseManager {
+public class CourseManager implements ManagerCourseOperations {
     Course[] courses;
     public CourseManager(){
         Connection conn = null;
         courses = new Course[0];
     }
 
-    public void addCourse(Course course){
+    public void AddCourse(Course course){
         int newLength = courses.length + 1;
         Course[] aux = new Course[newLength];
         int index = 0;
@@ -77,5 +77,24 @@ public class CourseManager {
             }
         }
         return grade/length;
+    }
+
+    public void UpdateCourse(Course course){
+        for(int i=0; i<courses.length ; i++){
+            if(courses[i].name == course.name)
+                courses[i].UpdateCourse(course.name ,course.description);
+        }
+    }
+    public void DeleteCourse(Course course){
+        int newLength = courses.length - 1;
+        Course[] aux = new Course[newLength];
+        int index = 0;
+        for(Course c: courses){
+            if(course != c)
+                aux[index++]=c;
+        }
+        aux[index] = course;
+        this.courses = new Course[newLength];
+        System.arraycopy(aux, 0, courses, 0 ,newLength);
     }
 }

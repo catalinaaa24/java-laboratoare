@@ -1,12 +1,15 @@
 package classes;
 
-public class Professor {
-    String firstName;
-    String lastName;
+public class Professor extends Person{
 
     @Override
     public String toString(){
-        return "Proffesor{" + "firstName= " + firstName + ", lastName= " + lastName + '}';
+        return "Professor{" + "firstName= " + firstName + ", lastName= " + lastName + '}';
+    }
+
+    public Professor() {
+        this.firstName = "";
+        this.lastName = "";
     }
 
     public Professor(String firstName, String lastName){
