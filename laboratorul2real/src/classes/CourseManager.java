@@ -1,27 +1,15 @@
 package classes;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+
 public class CourseManager implements ManagerCourseOperations {
-    Course[] courses;
+     ArrayList<Course> courses;
     public CourseManager(){
-        Connection conn = null;
-        courses = new Course[0];
+        courses = new ArrayList<Course>(0) ;
     }
 
     public void AddCourse(Course course){
-        int newLength = courses.length + 1;
-        Course[] aux = new Course[newLength];
-        int index = 0;
-        for(Course c: courses){
-            aux[index++]=c;
-        }
-        aux[index] = course;
-        this.courses = new Course[newLength];
-        System.arraycopy(aux, 0, courses, 0 ,newLength);
+        courses.add(course);
     }
 
     public void displayCoursesToConsole(){
@@ -34,7 +22,7 @@ public class CourseManager implements ManagerCourseOperations {
     public void addStudentToCourse(String cName, Student s){
         for(Course c : courses){
             if(cName == c.name)
-                c.addStudent(s);
+                c.AddStudent(s);
         }
     }
 
@@ -53,7 +41,7 @@ public class CourseManager implements ManagerCourseOperations {
 
         for(Course c : courses){
             if(cName == c.name){
-                int length = c.students.length;
+                int length = c.students.size();
                 int grade = 0;
                 for(Student s: c.students){
                     grade += s.grade;
@@ -80,21 +68,19 @@ public class CourseManager implements ManagerCourseOperations {
     }
 
     public void UpdateCourse(Course course){
-        for(int i=0; i<courses.length ; i++){
-            if(courses[i].name == course.name)
-                courses[i].UpdateCourse(course.name ,course.description);
+        for(int i=0; i<courses.size() ; i++){
+            if(courses.get(i).name == course.name)
+                courses.get(i).UpdateCourse(course.name ,course.description);
         }
     }
     public void DeleteCourse(Course course){
-        int newLength = courses.length - 1;
-        Course[] aux = new Course[newLength];
-        int index = 0;
+        ArrayList<Course> aux=new ArrayList<Course>(0);
+
         for(Course c: courses){
-            if(course != c)
-                aux[index++]=c;
+            if(course.name != c.name)
+                aux.add(c);
         }
-        aux[index] = course;
-        this.courses = new Course[newLength];
-        System.arraycopy(aux, 0, courses, 0 ,newLength);
+        this.courses = new ArrayList<Course>(0);
+        courses.addAll(aux);
     }
 }

@@ -1,28 +1,25 @@
 package classes;
+
+import java.util.ArrayList;
+
 public class Course implements CourseOperations {
     String name;
     String description;
     Professor teacher;
-    Student[] students;
+    ArrayList<Student> students;
 
-    public void UpdateProfessor(Professor professor){
-
-    }
-    public void AddStudent (Student student){
-
-    }
     public void RemoveStudent (Student student){
-        Student [] studentsAux = new Student[students.length-1];
-        for(int i=0; i<students.length; i++){
-            if(student != students[i]){
-                studentsAux[i] = students[i];
+        ArrayList<Student> studentsAux = new ArrayList<Student>(0);
+        for(int i=0; i<students.size(); i++){
+            if(student.getFirstName() != students.get(i).getFirstName()){
+                studentsAux.add(students.get(i));
             }
         }
-        System.arraycopy(studentsAux, 0, students, 0 ,students.length-1);
+        this.students = new ArrayList<Student>(studentsAux);
     }
     public void UpdateStudent (Student student){
         for(Student s: students){
-            if(student == s){
+            if(student.firstName == s.firstName){
                 s.firstName = student.firstName;
                 s.lastName = student.lastName;
                 s.grade = student.grade;
@@ -40,29 +37,20 @@ public class Course implements CourseOperations {
         this.name = "";
         this.description = "";
         this.teacher = new Professor();
-        this.students = new Student[]{};
+        this.students = new ArrayList<Student>(0);
     }
 
-    public Course(String name, String description, Professor teacher , Student[] students){
+    public Course(String name, String description, Professor teacher , ArrayList<Student> students){
          this.name=name;
          this.description=description;
          this.teacher=teacher;
          this.students=students;
     }
-    public void updateProfessor(Professor teacher) {
+    public void UpdateProfessor(Professor teacher) {
         this.teacher = teacher;
     }
-    public void addStudent(Student student) {
-        int newLenght = students.length + 1;
-        Student[] aux = new Student[newLenght];
-        int index = 0;
-        for(Student s : students){
-            aux[index++] = s;
-        }
-
-        aux[index] = student;
-        this.students = new Student[newLenght];
-        System.arraycopy(aux, 0,students, 0 ,newLenght);
+    public void AddStudent(Student student) {
+        students.add(student);
     }
 
     @Override
