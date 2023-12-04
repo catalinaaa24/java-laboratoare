@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Classes {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ArrayList<Student> students = new ArrayList<Student>(0);
 
         students.add(new Student("Andrei", "Negoita", 22231, 9));
@@ -25,102 +25,37 @@ public class Classes {
 
         courseManager.displayCoursesToConsole();
 
+        StudentReader sr = new StudentReader();
+        sr.start();
+        sr.join();
 
-        ArrayList<Student> studenti = new ArrayList<Student>();
-        try {
-            File f = new File("studenti.csv");
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            String line = br.readLine();
-            if (line != null) {
-                line = br.readLine();
-            }
-            while (line != null) {
-                String[] tokens = line.split(",");
-                Student s = new Student(
-                        tokens[0],
-                        tokens[1].trim(),
-                        Integer.parseInt(tokens[2].trim()),
-                        Integer.parseInt(tokens[3].trim())
-                );
-                studenti.add(s);
-                line = br.readLine();
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        ArrayList<Student> studenti = new ArrayList<Student>(sr.studenti);
+//        studenti.addAll(sr.studenti);
+
         System.out.println(studenti);
 
-        ArrayList<Course> cursuri = new ArrayList<Course>();
-        try {
-            File f = new File("cursuri.csv");
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            String line = br.readLine();
-            if (line != null) {
-                line = br.readLine();
-            }
-            while (line != null) {
-                String[] tokens = line.split(",");
-                Course s = new Course(
-                        tokens[0],
-                        tokens[1],
-                        new Professor(tokens[2].split(" ")[0],
-                                tokens[2].split(" ")[1]),
-                        studenti
-                );
-                cursuri.add(s);
-                line = br.readLine();
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        CoursesReader cr = new CoursesReader();
+        cr.start();
+        cr.join();
+
+        ArrayList<Course> cursuri = new ArrayList<Course>(cr.cursuri);
+
+
         System.out.println(cursuri);
 
-        try {
-            File f = new File("studentiout.csv");
-            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-            try {
-                studenti.add(new Student("Ionescu",
-                        "Dan", 4623, 6));
-                bw.write("name, surname, group, grade\r\n");
+        StudentWriter sw = new StudentWriter(studenti);
+        CoursesWriter cw = new CoursesWriter(cursuri);
 
-                for (Student stud : studenti) {
-                    bw.write(stud.firstName
-                            + "," + stud.lastName
-                            + "," + stud.groupNumber
-                            + "," + stud.grade+"\r\n");
-                }
-            } catch (IOException e) {
-                System.out.println(e);
-            } finally {
-                bw.close();
-            }
+        Thread t1 = new Thread(new Sum(0,500));
+        Thread t2 = new Thread(new Sum(500,1001));
 
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
 
-        try {
-            File f = new File("cursuriout.csv");
-            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-            try {
-                cursuri.add(new Course("Java",
-                        "programare",new Professor("Gabriel","Danciu"),studenti));
-                bw.write("name, description,teacher\r\n");
 
-                for (Course stud : cursuri) {
-                    bw.write(stud.name
-                            + "," + stud.description
-                            + "," + stud.teacher.firstName+ " " +stud.teacher.lastName+"\r\n");
-                }
-            } catch (IOException e) {
-                System.out.println(e);
-            } finally {
-                bw.close();
-            }
-
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        System.out.println(t1.sum+t2.sum);
 
     }
 
