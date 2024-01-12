@@ -3,11 +3,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public class CarsReader extends Thread {
+public class CarsReader2 implements Runnable {
     ArrayList<Car> cars = new ArrayList<Car>();
 
-    public CarsReader() {
+    public CarsReader2() {
 
+    }
+
+    public ArrayList<Car> getCars() {
+        return cars;
     }
 
     @Override
